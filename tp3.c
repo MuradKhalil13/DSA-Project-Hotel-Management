@@ -122,4 +122,41 @@ int addClient(T_Site* site, T_Client* client){
     return 0;
 }
 
+int addSite(T_Hotel* hotel, T_Site* site){
+    if (hotel->first == NULL){
+        hotel->first = site;
+        return 1;
+    }
+
+    T_Site* current = hotel->first;
+    T_Site* previous = NULL;
+
+    int compare;
+
+    while (1){
+        compare = strcmp(site->city, current->city);
+
+        if (compare == 0){
+            return 0;
+        }
+        else if (compare > 0 && current->next == NULL){
+            current->next = site;
+            return 1;
+        }
+        else if (compare < 0 && previous == NULL){
+            hotel->first = site;
+            site->next = current;
+            return 1;
+        }
+        else if (compare < 0){
+            previous->next = site;
+            site->next = current;
+            return 1;
+        }
+
+        previous = current;
+        current = current->next;
+    }
+}
+
 
