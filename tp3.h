@@ -17,3 +17,7 @@ typedef struct Hotel{
     char* name;
     struct Site* first;
 } T_Hotel;
+
+T_Client* createClient(char* last_name, char* first_name, int age, int num_room);
+T_Site* createSite(char* city);
+T_Hotel* createHotel(char* name);
