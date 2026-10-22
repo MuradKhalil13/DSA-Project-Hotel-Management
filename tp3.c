@@ -1,6 +1,7 @@
 #include "tp3.h"
 #include <string.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 T_Client* createClient(char* last_name, char* first_name, int age, int num_room){
     T_Client* client;
@@ -159,4 +160,39 @@ int addSite(T_Hotel* hotel, T_Site* site){
     }
 }
 
+void displayHotel(T_Hotel* hotel){
+    printf("City                 Number of customers\n\n");
+
+    if (hotel->first == NULL){
+        return;
+    }
+
+    T_Site* site = hotel->first;
+    
+    while (1){
+        printf("%s                 %d\n", site->city, site->number_clients);
+        if (site->next == NULL){
+            return;
+        }
+        site = site->next;
+    }
+}
+
+void displaySite(T_Site* site){
+    printf("Last name                 First name                 Age     Room\n\n");
+
+    if (site->first == NULL){
+        return;
+    }
+
+    T_Client* client = site->first;
+
+    while (1){
+        printf("%s                 %s                 %d     %d\n", client->last_name, client->first_name, client->age, client->num_room);
+        if (client->next == NULL){
+            return;
+        }
+        client = client->next;
+    }
+}
 

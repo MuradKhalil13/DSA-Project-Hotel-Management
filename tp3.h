@@ -27,3 +27,7 @@ T_Hotel* createHotel(char* name);
 int addClient(T_Site* site, T_Client* client);
 
 int addSite(T_Hotel* hotel, T_Site* site);
+
+void displayHotel(T_Hotel* hotel);
+
+void displaySite(T_Site* site);
