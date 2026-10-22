@@ -62,4 +62,64 @@ T_Hotel* createHotel(char* name){
     return hotel;
 }
 
+int addClient(T_Site* site, T_Client* client){
+    if (site->first == NULL){
+        site->first = client;
+        site->number_clients++;
+        return 1;
+    }
+
+    T_Client* current = site->first;
+    T_Client* previous = NULL;
+
+    int compare;
+
+    for (int i = 0; i < site->number_clients; i++){
+        compare = strcmp(client->last_name, current->last_name);
+
+        if (compare == 0){
+            compare = strcmp(client->first_name, current->first_name);
+
+            if (compare == 0){
+                if (previous == NULL){
+                    site->first = client;
+                    client->next = current;
+                    site->number_clients++;
+                    return 1;
+                }
+                else{
+                    previous->next = client;
+                    client->next = current;
+                    site->number_clients++;
+                    return 1;
+                }
+            }
+        }
+        if (compare > 0){
+            if (current->next == NULL){
+                current->next = client;
+                site->number_clients++;
+                return 1;
+            }
+        }
+        else if (previous == NULL){
+            site->first = client;
+            client->next = current;
+            site->number_clients++;
+            return 1;
+        }
+        else{
+            previous->next = client;
+            client->next = current;
+            site->number_clients++;
+            return 1;
+        }
+
+        previous = current;
+        current = current->next;
+    }
+    
+    return 0;
+}
+
 

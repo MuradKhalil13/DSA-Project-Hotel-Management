@@ -19,5 +19,9 @@ typedef struct Hotel{
 } T_Hotel;
 
 T_Client* createClient(char* last_name, char* first_name, int age, int num_room);
+
 T_Site* createSite(char* city);
+
 T_Hotel* createHotel(char* name);
+
+int addClient(T_Site* site, T_Client* client);
