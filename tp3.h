@@ -31,3 +31,9 @@ int addSite(T_Hotel* hotel, T_Site* site);
 void displayHotel(T_Hotel* hotel);
 
 void displaySite(T_Site* site);
+
+int deleteClient(T_Site *site, char *last_name, char *first_name);
+
+int deleteSite(T_Hotel *hotel, char *city);
+
+void freeClients(T_Client* head);

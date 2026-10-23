@@ -64,6 +64,7 @@ T_Hotel* createHotel(char* name){
 }
 
 int addClient(T_Site* site, T_Client* client){
+
     if (site->first == NULL){
         site->first = client;
         site->number_clients++;
@@ -194,5 +195,75 @@ void displaySite(T_Site* site){
         }
         client = client->next;
     }
+}
+
+
+int deleteClient(T_Site *site, char *last_name, char *first_name){
+    if(site==NULL || site->first==NULL){
+        return 0;
+    }
+
+    T_Client* current=site->first;
+    T_Client* previous=NULL;
+
+    while(current!=NULL){
+        if(strcmp(current->last_name, last_name)==0 && strcmp(current->first_name, first_name)==0){
+            if(previous==NULL){
+                site->first = current->next;
+            }
+            else{
+                previous->next=current->next;
+        }
+
+            free(current->last_name);
+            free(current->first_name);
+            free(current);
+
+            site->number_clients--;
+            return 1;
+    }
+        previous=current;
+        current=current->next;
+}
+    return 0;
+}
+
+void freeClients(T_Client* head){
+    
+    while(head!=NULL){
+        T_Client* temp=head;
+        head=head->next;
+        free(temp->last_name);
+        free(temp->first_name);
+        free(temp);
+    }   
+}
+
+int deleteSite(T_Hotel *hotel, char *city){
+    if (hotel==NULL || hotel->first==NULL){
+        return 0;
+    }
+
+    T_Site* current=hotel->first;
+    T_Site* previous=NULL;
+
+    while (current!=NULL){
+        if(strcmp(current->city, city)==0){
+            freeClients(current->first);
+
+            if(previous==NULL){
+                hotel->first=current->next;
+            }else{
+                previous->next=current->next;
+            }
+
+            free(current->city);
+            free(current);
+            return 1;
+    }
+        previous=current;
+        current=current->next;
+}
+    return 0;
 }
 
