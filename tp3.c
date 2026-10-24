@@ -267,3 +267,170 @@ int deleteSite(T_Hotel *hotel, char *city){
     return 0;
 }
 
+
+
+int startsWithIgnoreCase(char *name, char *prefix){
+    while (*prefix != '\0'){
+        if (*name == '\0'){
+            return 0;
+        }
+        if (tolower((unsigned char)*name) !=tolower((unsigned char)*prefix)){
+            return 0;
+        }
+        name++;
+        prefix++;
+    }
+
+    return 1;
+}
+
+void searchClients(T_Hotel *hotel, char *critereaName){
+    if (hotel == NULL || critereaName == NULL){
+        return;
+    }
+    SearchResult *results = NULL;
+
+    T_Site *site = hotel->first;
+
+    while (site != NULL){
+        T_Client *client = site->first;
+
+        while (client != NULL){
+            if (startsWithIgnoreCase(client->last_name, critereaName)){
+                SearchResult *newResult = malloc(sizeof(SearchResult));
+
+                if (newResult == NULL){
+                    printf("Memory allocation failed.\n");
+
+                    while (results != NULL){
+                        SearchResult *temp = results;
+                        results = results->next;
+                        free(temp);
+                    }
+                    return;
+                }
+                newResult->client = client;
+                newResult->city = site->city;
+                newResult->next = NULL;
+
+                SearchResult **position = &results;
+
+                while (*position != NULL){
+
+                    int compare = strcmp(
+                        newResult->client->last_name,
+                        (*position)->client->last_name);
+
+                    if (compare == 0){
+                        compare = strcmp(
+                            newResult->client->first_name,
+                            (*position)->client->first_name);
+                    }
+
+                    if (compare < 0){
+                        break;
+                    }
+                    position = &(*position)->next;
+                }
+                newResult->next = *position;
+                *position = newResult;
+            }
+            client = client->next;
+        }
+        site = site->next;
+    }
+
+    printf("\nLast name       First name      Age    Room    City\n");
+    printf("------------------------------------------------------\n");
+
+    if (results == NULL){
+        printf("No matching customers found.\n");
+        return;
+    }
+    while (results != NULL){
+        SearchResult *temp = results;
+
+        printf("%-16s%-16s%-7d%-8d%s\n",
+               temp->client->last_name,
+               temp->client->first_name,
+               temp->client->age,
+               temp->client->num_room,
+               temp->city);
+
+        results = results->next;
+        free(temp);
+    }
+}
+
+void processingfile(T_Hotel *hotel){
+    if (hotel == NULL){
+        printf("Hotel does not exist.\n");
+        return;
+    }
+    FILE *file = fopen("bookings.txt", "r");
+
+    if (file == NULL){
+        printf("Could not open the file.\n");
+        return;
+    }
+
+    char line[256];
+    if (fgets(line, sizeof(line), file) == NULL){
+        fclose(file);
+        return;
+    }
+
+    while (fgets(line, sizeof(line), file) != NULL){
+        char *last_name = strtok(line, ";\r\n");
+        char *first_name = strtok(NULL, ";\r\n");
+        char *age_text = strtok(NULL, ";\r\n");
+        char *room_text = strtok(NULL, ";\r\n");
+        char *city = strtok(NULL, ";\r\n");
+
+        if (last_name == NULL ||first_name == NULL ||age_text == NULL || room_text == NULL ||city == NULL){
+            printf("Invalid line in the file. Skipping it.\n");
+            continue;
+        }
+        int age = atoi(age_text);
+        int room = atoi(room_text);
+
+        T_Site *site = hotel->first;
+
+        while (site != NULL){
+            if (strcmp(site->city, city) == 0){
+                break;
+            }
+            site = site->next;
+        }
+        if (site == NULL){
+            site = createSite(city);
+            if (site == NULL){
+                printf("Could not create the location.\n");
+                continue;
+            }
+            if (addSite(hotel, site) == 0){
+                printf("Could not add the location.\n");
+                free(site->city);
+                free(site);
+                continue;
+            }
+        }
+        T_Client *client = createClient(
+            last_name,
+            first_name,
+            age,
+            room);
+        if (client == NULL){
+            printf("Could not create the customer.\n");
+            continue;
+        }
+        if (addClient(site, client) == 0){
+            printf("Could not add the customer.\n");
+            free(client->last_name);
+            free(client->first_name);
+            free(client);
+        }
+    }
+    fclose(file);
+    printf("File processing finished.\n");
+}

@@ -18,6 +18,12 @@ typedef struct Hotel{
     struct Site* first;
 } T_Hotel;
 
+typedef struct SearchResult{
+    T_Client *client;
+    char *city;
+    struct SearchResult *next;
+} SearchResult;
+
 T_Client* createClient(char* last_name, char* first_name, int age, int num_room);
 
 T_Site* createSite(char* city);
@@ -37,3 +43,10 @@ int deleteClient(T_Site *site, char *last_name, char *first_name);
 int deleteSite(T_Hotel *hotel, char *city);
 
 void freeClients(T_Client* head);
+
+int startsWithIgnoreCase(char *name, char *prefix);
+
+void searchClients(T_Hotel *hotel, char *criteriaName);
+
+void processingfile(T_Hotel *hotel);
+
