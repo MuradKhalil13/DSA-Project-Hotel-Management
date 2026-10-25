@@ -50,3 +50,5 @@ void searchClients(T_Hotel *hotel, char *criteriaName);
 
 void processingfile(T_Hotel *hotel);
 
+int uniqueRoom(T_Site* site, int room);
+

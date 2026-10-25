@@ -435,3 +435,21 @@ void processingfile(T_Hotel *hotel){
     fclose(file);
     printf("File processing finished.\n");
 }
+
+int uniqueRoom(T_Site* site, int room){
+    if (site->number_clients == 0){
+        return 1;
+    }
+
+    T_Client* current = site->first;
+
+    for (int i = 0; i < site->number_clients; i++){
+        if (current->num_room == room){
+            return 0;
+        }
+
+        current = current->next;
+    }
+
+    return 1;
+}

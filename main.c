@@ -96,37 +96,41 @@ int main() {
                     if (site == NULL) {
                         printf("Location not found!\n");
                     } else {
-                        printf("Enter last name: ");
-                        scanf("%49s", last_name);
-
-                        printf("Enter first name: ");
-                        scanf("%49s", first_name);
-
-                        printf("Enter age: ");
-                        scanf("%d", &age);
-
                         printf("Enter room number: ");
                         scanf("%d", &room);
 
-                        T_Client *client =
-                            createClient(last_name, first_name, age, room);
+                        if (!uniqueRoom(site, room)){
+                            printf("There already exists a customer with the same room number!\n");
+                        }
+                        else{
+                            printf("Enter last name: ");
+                            scanf("%49s", last_name);
 
-                        if (client == NULL) {
-                            printf("Error creating booking.\n");
-                        } else {
-                            if (addClient(site, client)) {
-                                printf("Booking added successfully!\n");
+                            printf("Enter first name: ");
+                            scanf("%49s", first_name);
+
+                            printf("Enter age: ");
+                            scanf("%d", &age);
+
+                            T_Client *client =
+                                createClient(last_name, first_name, age, room);
+
+                            if (client == NULL) {
+                                printf("Error creating booking.\n");
                             } else {
-                                printf("Could not add booking.\n");
+                                if (addClient(site, client)) {
+                                    printf("Booking added successfully!\n");
+                                } else {
+                                    printf("Could not add booking.\n");
 
-                                free(client->last_name);
-                                free(client->first_name);
-                                free(client);
+                                    free(client->last_name);
+                                    free(client->first_name);
+                                    free(client);
+                                }
                             }
                         }
                     }
                 }
-
                 break;
             }
 
