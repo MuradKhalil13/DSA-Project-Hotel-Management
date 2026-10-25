@@ -178,8 +178,8 @@ int main() {
                     T_Site *site = hotel->first;
 
                     while (site != NULL &&
-                           strcmp(site->city, input_name) != 0) {
-                        site = site->next;
+                            strcmp(site->city, input_name) != 0) {
+                            site = site->next;
                     }
 
                     if (site == NULL) {
@@ -191,10 +191,24 @@ int main() {
                         printf("Enter first name: ");
                         scanf("%49s", first_name);
 
-                        if (deleteClient(site, last_name, first_name)) {
-                            printf("Booking deleted successfully!\n");
-                        } else {
-                            printf("Customer not found!\n");
+                        if (differentNameRoom(site, last_name, first_name)){
+                            if (deleteClient(site, last_name, first_name)) {
+                                printf("Booking deleted successfully!\n");
+                            }
+                            else{
+                                printf("Customer not found!\n");
+                            }
+                        }
+                        else{
+                            printf("More than one customer with that last and first name were found. Enter room number to delete: ");
+                            scanf("%d", &room);
+
+                            if (deleteClientRoom(site, last_name, first_name, room)){
+                                printf("Booking deleted successfully!\n");
+                            }
+                            else{
+                                printf("Customer with that last and first name and room was not found!\n");
+                            }
                         }
                     }
                 }

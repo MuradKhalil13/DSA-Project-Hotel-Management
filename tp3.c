@@ -214,7 +214,7 @@ int deleteClient(T_Site *site, char *last_name, char *first_name){
             }
             else{
                 previous->next=current->next;
-        }
+            }
 
             free(current->last_name);
             free(current->first_name);
@@ -222,10 +222,10 @@ int deleteClient(T_Site *site, char *last_name, char *first_name){
 
             site->number_clients--;
             return 1;
-    }
+        }
         previous=current;
         current=current->next;
-}
+    }
     return 0;
 }
 
@@ -452,4 +452,84 @@ int uniqueRoom(T_Site* site, int room){
     }
 
     return 1;
+}
+
+static int compareInts(const void *a, const void *b)
+{
+    int x = *(const int *)a;
+    int y = *(const int *)b;
+
+    return (x > y) - (x < y);
+}
+
+int differentNameRoom(T_Site* site, char* last_name, char* first_name){
+    int* rooms = malloc(sizeof(int) * site->number_clients);
+    T_Client* current = site->first;
+    int sameName = 0;
+
+    for (int i = 0; i < site->number_clients; i++){
+        if (strcmp(current->last_name, last_name) == 0 && strcmp(current->first_name, first_name) == 0){
+            rooms[sameName] = current->num_room;
+            sameName++;
+        }
+    }
+
+    if (sameName == 0){
+        free(rooms);
+        return 1;
+    }
+
+    int* sameNameRooms = malloc(sizeof(int) * sameName);
+
+    for (int i = 0; i < sameName; i++){
+        sameNameRooms[i] = rooms[i];
+    }
+
+    qsort(sameNameRooms, sameName, sizeof(int), compareInts);
+
+    free(rooms);
+
+    for (int i = 1; i < sameName; i++){
+        if (sameNameRooms[i] == sameNameRooms[i - 1]){
+            free(sameNameRooms);
+            return 0;
+        }
+    }
+
+    free(sameNameRooms);
+
+    return 1;
+}
+
+int deleteClientRoom(T_Site* site, char* last_name, char* first_name, int room){
+    if (site->first == NULL){
+        return 0;
+    }
+
+    T_Client* current = site->first;
+    T_Client* previous = NULL;
+
+    for (int i = 0; i < site->number_clients; i++){
+        if (strcmp(current->last_name, last_name) == 0 && strcmp(current->first_name, first_name) == 0 && current->num_room == room){
+            if(previous==NULL){
+                site->first = current->next;
+            }
+            else{
+                previous->next=current->next;
+            }
+
+            free(current->last_name);
+            free(current->first_name);
+            free(current);
+
+            site->number_clients--;
+
+            return 1;
+        }
+
+        previous = current;
+        current = current->next;
+    }
+
+    return 0;
 }
