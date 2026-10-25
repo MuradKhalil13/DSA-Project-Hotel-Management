@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <ctype.h>
 
 T_Client* createClient(char* last_name, char* first_name, int age, int num_room){
     T_Client* client;
