@@ -38,6 +38,8 @@ int main() {
 
                 free(hotel->name);
                 free(hotel);
+
+                hotel = NULL;
             }
         }
         else{
