@@ -265,9 +265,7 @@ int main() {
         while (site != NULL) {
             T_Site *next = site->next;
 
-            freeClients(site->first);
-            free(site->city);
-            free(site);
+            deleteSite(hotel, site->city);
 
             site = next;
         }

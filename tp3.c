@@ -229,17 +229,6 @@ int deleteClient(T_Site *site, char *last_name, char *first_name){
     return 0;
 }
 
-void freeClients(T_Client* head){
-    
-    while(head!=NULL){
-        T_Client* temp=head;
-        head=head->next;
-        free(temp->last_name);
-        free(temp->first_name);
-        free(temp);
-    }   
-}
-
 int deleteSite(T_Hotel *hotel, char *city){
     if (hotel==NULL || hotel->first==NULL){
         return 0;
@@ -249,8 +238,16 @@ int deleteSite(T_Hotel *hotel, char *city){
     T_Site* previous=NULL;
 
     while (current!=NULL){
+        T_Client* head = current->first;
+
         if(strcmp(current->city, city)==0){
-            freeClients(current->first);
+            while(head!=NULL){
+                T_Client* temp=head;
+                head=head->next;
+                free(temp->last_name);
+                free(temp->first_name);
+                free(temp);
+            }
 
             if(previous==NULL){
                 hotel->first=current->next;

@@ -42,8 +42,6 @@ int deleteClient(T_Site *site, char *last_name, char *first_name);
 
 int deleteSite(T_Hotel *hotel, char *city);
 
-void freeClients(T_Client* head);
-
 int startsWithIgnoreCase(char *name, char *prefix);
 
 void searchClients(T_Hotel *hotel, char *criteriaName);
