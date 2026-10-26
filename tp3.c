@@ -360,22 +360,20 @@ void searchClients(T_Hotel *hotel, char *critereaName){
     }
 }
 
-void processingfile(T_Hotel *hotel){
+int processingfile(T_Hotel *hotel){
     if (hotel == NULL){
-        printf("Hotel does not exist.\n");
-        return;
+        return 0;
     }
     FILE *file = fopen("bookings.txt", "r");
 
     if (file == NULL){
-        printf("Could not open the file.\n");
-        return;
+        return 0;
     }
 
     char line[256];
     if (fgets(line, sizeof(line), file) == NULL){
         fclose(file);
-        return;
+        return 0;
     }
 
     while (fgets(line, sizeof(line), file) != NULL){
@@ -386,7 +384,7 @@ void processingfile(T_Hotel *hotel){
         char *city = strtok(NULL, ";\r\n");
 
         if (last_name == NULL ||first_name == NULL ||age_text == NULL || room_text == NULL ||city == NULL){
-            printf("Invalid line in the file. Skipping it.\n");
+            printf("Importing txt: Invalid line in the file. Skipping it.\n");
             continue;
         }
         int age = atoi(age_text);
@@ -403,11 +401,11 @@ void processingfile(T_Hotel *hotel){
         if (site == NULL){
             site = createSite(city);
             if (site == NULL){
-                printf("Could not create the location.\n");
+                printf("Importing txt: Could not create the location.\n");
                 continue;
             }
             if (addSite(hotel, site) == 0){
-                printf("Could not add the location.\n");
+                printf("Importing txt: Could not add the location.\n");
                 free(site->city);
                 free(site);
                 continue;
@@ -419,11 +417,11 @@ void processingfile(T_Hotel *hotel){
             age,
             room);
         if (client == NULL){
-            printf("Could not create the customer.\n");
+            printf("Importing txt: Could not create the customer.\n");
             continue;
         }
         if (addClient(site, client) == 0){
-            printf("Could not add the customer.\n");
+            printf("Importing txt: Could not add the customer.\n");
             free(client->last_name);
             free(client->first_name);
             free(client);
@@ -431,6 +429,8 @@ void processingfile(T_Hotel *hotel){
     }
     fclose(file);
     printf("File processing finished.\n");
+    
+    return 1;
 }
 
 int uniqueRoom(T_Site* site, int room){

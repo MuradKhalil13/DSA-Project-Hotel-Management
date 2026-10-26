@@ -11,6 +11,42 @@ int main() {
     char last_name[50];
     int age, room;
 
+    printf("Welcome to the program! At the start of the program, you can choose to import hotel data from bookings.txt, If you want to do it, enter 1, any other number closes this dialogue: ");
+
+    do{
+        if (scanf("%d", &choice) != 1) {
+                printf("Invalid input! Please enter a number: ");
+                while (getchar() != '\n'){}
+                continue;
+        }
+        break;
+    }
+    while (1);
+
+    if (choice == 1){
+        printf("Enter hotel name: ");
+        scanf("%99s", input_name);
+
+        hotel = createHotel(input_name);
+
+        if (hotel != NULL) {
+            if (processingfile(hotel)){
+                printf("Successfully imported from txt!\n");
+            }
+            else{
+                printf("Failed to import from txt!\n");
+
+                free(hotel->name);
+                free(hotel);
+            }
+        }
+        else{
+            printf("Error creating hotel.\n");
+        }
+    }
+
+
+
     do {
         printf("\n--- HOTEL MANAGEMENT SYSTEM ---\n");
         printf("1. Create a hotel chain\n");
