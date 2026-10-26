@@ -50,9 +50,7 @@ void processingfile(T_Hotel *hotel);
 
 int uniqueRoom(T_Site* site, int room);
 
-static int compare_ints(const void *a, const void *b);
-
-int differentNameRoom(T_Site* site, char* last_name, char* first_name);
+int sameName(T_Site* site, char* last_name, char* first_name);
 
 int deleteClientRoom(T_Site* site, char* last_name, char* first_name, int room);
 

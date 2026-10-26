@@ -191,15 +191,17 @@ int main() {
                         printf("Enter first name: ");
                         scanf("%49s", first_name);
 
-                        if (differentNameRoom(site, last_name, first_name)){
+                        int same = sameName(site, last_name, first_name);
+
+                        if (same == 1){
                             if (deleteClient(site, last_name, first_name)) {
                                 printf("Booking deleted successfully!\n");
                             }
                             else{
-                                printf("Customer not found!\n");
+                                printf("Failed to delete!\n");
                             }
                         }
-                        else{
+                        else if (same > 1){
                             printf("More than one customer with that last and first name were found. Enter room number to delete: ");
                             scanf("%d", &room);
 
@@ -207,8 +209,11 @@ int main() {
                                 printf("Booking deleted successfully!\n");
                             }
                             else{
-                                printf("Customer with that last and first name and room was not found!\n");
+                                printf("There is no customer with that name in that room!\n");
                             }
+                        }
+                        else{
+                            printf("No customer with that name found!");
                         }
                     }
                 }
